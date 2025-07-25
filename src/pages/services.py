@@ -175,6 +175,19 @@ class APIService:
             return [], error_message
 
         return [], error_message
+    
+    def get_customer_by_id(self, customer_id: int) -> Tuple[Optional[Dict], Optional[str]]:
+        """
+        Get a specific customer by ID.
+        
+        Args:
+            customer_id: The ID of the customer to retrieve
+            
+        Returns:
+            Tuple of (customer_data, error_message)
+        """
+        response_data, error_message = self._make_request(f'/v1/customers/{customer_id}')
+        return response_data, error_message
 
     def health_check(self) -> Tuple[bool, Optional[str]]:
         """

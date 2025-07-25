@@ -1,27 +1,45 @@
 {% extends 'base.html' %}
 
-{% block title %}Home - Video Rental Portal{% endblock %}
+{% block title %}Customers - Video Rental Portal{% endblock %}
 
 {% block content %}
-<h2>Welcome to the Customers Section</h2>
-<p>Manage your video rental business with our comprehensive portal system.</p>
+<h2>👥 Customers Directory</h2>
+<p>Browse and manage your customer database.</p>
 
-<div class="customers">
-    <h3>👥 See Customers</h3>
-    <p>See customers information</p>
+<!-- Simple Customer Search by ID -->
+<div class="card" style="margin: 20px 0;">
+    <h4>🔍 Search Customer by ID</h4>
+    <form method="GET" action="{% url 'customers' %}" style="display: flex; gap: 10px; align-items: center;">
+        <input type="number" name="customer_id" placeholder="Enter Customer ID" value="{{ search_customer_id }}" 
+               style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 150px;">
+        <button type="submit" class="btn btn-primary" style="margin: 0;">Search</button>
+        {% if search_customer_id %}
+            <a href="{% url 'customers' %}" class="btn btn-secondary" style="margin: 0;">Clear</a>
+        {% endif %}
+    </form>
 </div>
+
+{% if error_message %}
+    <div class="alert alert-error">
+        <strong>Error:</strong> {{ error_message }}
+        <br><small>Make sure the API server is running on localhost:8080</small>
+    </div>
+{% endif %}
 
 {% if customers %}
     <div class="alert alert-info">
-        <strong>Total Customers:</strong> {{ total_customers }}
+        {% if is_search %}
+            <strong>Search Result:</strong> Found customer with ID {{ search_customer_id }}
+        {% else %}
+            <strong>Total Customers:</strong> {{ total_customers }}
+        {% endif %}
     </div>
-
 
     <div class="table-container">
         <table class="table">
             <thead>
                 <tr>
-                    <th>id</th>
+                    <th class="text-center">ID</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
@@ -30,17 +48,62 @@
             <tbody>
                 {% for customer in customers %}
                 <tr>
-                    <td> {{ customer.id|default:"N/A" }} </td>
-                    <td> {{ customer.first_name|default:"N/A" }} </td>
-                    <td> {{ customer.last_name|default:"N/A" }} </td>
-                    <td> {{ customer.email}} </td>
+                    <td class="text-center font-bold">
+                        {{ customer.id|default:"N/A" }}
+                    </td>
+                    <td>
+                        {{ customer.first_name|default:"N/A" }}
+                    </td>
+                    <td>
+                        {{ customer.last_name|default:"N/A" }}
+                    </td>
+                    <td>
+                        {{ customer.email|default:"N/A" }}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 
+    <div>
+        <button onclick="location.reload()" class="btn btn-success">
+            🔄 Refresh Customers
+        </button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">
+            ← Back to Home
+        </a>
+    </div>
 
+{% else %}
+    {% if not error_message %}
+        <div class="no-content">
+            {% if is_search %}
+                <h3>🔍 No Customer Found</h3>
+                <p>No customer found with ID: {{ search_customer_id }}</p>
+                <a href="{% url 'customers' %}" class="btn btn-primary">
+                    ← Back to All Customers
+                </a>
+            {% else %}
+                <h3>👥 No Customers Found</h3>
+                <p>No customers are currently available in the database.</p>
+                <button onclick="location.reload()" class="btn btn-primary">
+                    🔄 Retry
+                </button>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endif %}
+
+<div class="info-box">
+    <h4>📡 API Information</h4>
+    <p><strong>Endpoints:</strong></p>
+    <ul>
+        <li><code>GET http://localhost:8080/v1/customers</code> - Get all customers</li>
+        <li><code>GET http://localhost:8080/v1/customers/{id}</code> - Get customer by ID</li>
+    </ul>
+    <p><strong>Authentication:</strong> X-API-Key header required</p>
+    <p><strong>Response:</strong> Customer object(s) with id, first_name, last_name, and email</p>
+</div>
 
 {% endblock %}

@@ -53,19 +53,40 @@ def films(request):
 
 
 def customers(request):
-    """Customers listing page view."""
+    """Customers listing page view with optional search by customer ID."""
     log_user_action(None, "Accessed customers page")
-
-    customers_data, error_message = api_service.get_customers()
-
+    
+    customers_data = []
+    error_message = None
+    search_customer_id = request.GET.get('customer_id')
+    
+    if search_customer_id:
+        # Search for specific customer by ID
+        try:
+            customer_id = int(search_customer_id)
+            customer_data, error_message = api_service.get_customer_by_id(customer_id)
+            
+            if customer_data and not error_message:
+                customers_data = [customer_data]  # Put single customer in a list for template consistency
+                log_user_action(None, f"Searched for customer ID: {customer_id}")
+            elif not error_message:
+                error_message = f"No customer found with ID: {customer_id}"
+        except ValueError:
+            error_message = "Please enter a valid customer ID number"
+    else:
+        # Get all customers
+        customers_data, error_message = api_service.get_customers()
+    
     # Format error message if needed
     if error_message:
         error_message = format_error_message(error_message, "Customers API")
-
+    
     context = {
         'customers': customers_data,
         'error_message': error_message,
-        'total_customers': len(customers_data)
+        'total_customers': len(customers_data),
+        'search_customer_id': search_customer_id,
+        'is_search': bool(search_customer_id)
     }
-
+    
     return render(request, 'pages/customers.html', context)
