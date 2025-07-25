@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Video Rental Portal{% endblock %}
+
+{% block content %}
+<h2>Welcome to the Video Rental Portal</h2>
+<p>Manage your video rental business with our comprehensive portal system.</p>
+
+<div class="film">
+    <h3>👥 See Films</h3>
+    <p>See film information</p>
+    <a href="#" onclick="alert('Film information coming soon!')">Manage Customers</a>
+</div>
+
+<div class="card">
+    <h3>👥 Customer Management</h3>
+    <p>Manage customer information, view rental history, and handle customer accounts.</p>
+    <a href="#" onclick="alert('Customer management coming soon!')">Manage Customers</a>
+</div>
+
+<div class="card">
+    <h3>📊 Rentals</h3>
+    <p>Process new rentals, track current rentals, and manage returns.</p>
+    <a href="#" onclick="alert('Rental management coming soon!')">Manage Rentals</a>
+</div>
+
+<div class="card">
+    <h3>🏪 Store Management</h3>
+    <p>Manage store information, inventory, and staff details.</p>
+    <a href="#" onclick="alert('Store management coming soon!')">Manage Stores</a>
+</div>
+
+<div class="card">
+    <h3>💳 Payments</h3>
+    <p>Track payments, process transactions, and manage billing.</p>
+    <a href="#" onclick="alert('Payment management coming soon!')">Manage Payments</a>
+</div>
+
+<div class="card">
+    <h3>⚙️ Admin Panel</h3>
+    <p>Access the Django admin interface for advanced management.</p>
+    <a href="/admin/">Admin Panel</a>
+</div>
+{% endblock %}
