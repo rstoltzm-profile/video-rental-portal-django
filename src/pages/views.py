@@ -13,21 +13,42 @@ def home(request):
 
 
 def films(request):
-    """Films listing page view."""
+    """Films listing page view with optional search by film ID."""
     log_user_action(None, "Accessed films page")
-
-    films_data, error_message = api_service.get_films()
-
+    
+    films_data = []
+    error_message = None
+    search_film_id = request.GET.get('film_id')
+    
+    if search_film_id:
+        # Search for specific film by ID
+        try:
+            film_id = int(search_film_id)
+            film_data, error_message = api_service.get_film_by_id(film_id)
+            
+            if film_data and not error_message:
+                films_data = [film_data]  # Put single film in a list for template consistency
+                log_user_action(None, f"Searched for film ID: {film_id}")
+            elif not error_message:
+                error_message = f"No film found with ID: {film_id}"
+        except ValueError:
+            error_message = "Please enter a valid film ID number"
+    else:
+        # Get all films
+        films_data, error_message = api_service.get_films()
+    
     # Format error message if needed
     if error_message:
         error_message = format_error_message(error_message, "Films API")
-
+    
     context = {
         'films': films_data,
         'error_message': error_message,
-        'total_films': len(films_data)
+        'total_films': len(films_data),
+        'search_film_id': search_film_id,
+        'is_search': bool(search_film_id)
     }
-
+    
     return render(request, 'pages/films.html', context)
 
 

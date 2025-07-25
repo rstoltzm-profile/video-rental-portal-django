@@ -6,6 +6,19 @@
 <h2>🎬 Films Catalog</h2>
 <p>Browse and manage your film inventory.</p>
 
+<!-- Simple Film Search by ID -->
+<div class="card" style="margin: 20px 0;">
+    <h4>🔍 Search Film by ID</h4>
+    <form method="GET" action="{% url 'films' %}" style="display: flex; gap: 10px; align-items: center;">
+        <input type="number" name="film_id" placeholder="Enter Film ID" value="{{ search_film_id }}" 
+               style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 150px;">
+        <button type="submit" class="btn btn-primary" style="margin: 0;">Search</button>
+        {% if search_film_id %}
+            <a href="{% url 'films' %}" class="btn btn-secondary" style="margin: 0;">Clear</a>
+        {% endif %}
+    </form>
+</div>
+
 {% if error_message %}
     <div class="alert alert-error">
         <strong>Error:</strong> {{ error_message }}
@@ -15,7 +28,11 @@
 
 {% if films %}
     <div class="alert alert-info">
-        <strong>Total Films:</strong> {{ total_films }}
+        {% if is_search %}
+            <strong>Search Result:</strong> Found film with ID {{ search_film_id }}
+        {% else %}
+            <strong>Total Films:</strong> {{ total_films }}
+        {% endif %}
     </div>
 
     <div class="table-container">
@@ -75,11 +92,19 @@
 {% else %}
     {% if not error_message %}
         <div class="no-content">
-            <h3>📽️ No Films Found</h3>
-            <p>No films are currently available in the database.</p>
-            <button onclick="location.reload()" class="btn btn-primary">
-                🔄 Retry
-            </button>
+            {% if is_search %}
+                <h3>� No Film Found</h3>
+                <p>No film found with ID: {{ search_film_id }}</p>
+                <a href="{% url 'films' %}" class="btn btn-primary">
+                    ← Back to All Films
+                </a>
+            {% else %}
+                <h3>�📽️ No Films Found</h3>
+                <p>No films are currently available in the database.</p>
+                <button onclick="location.reload()" class="btn btn-primary">
+                    🔄 Retry
+                </button>
+            {% endif %}
         </div>
     {% endif %}
 {% endif %}
