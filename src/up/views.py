@@ -9,7 +9,7 @@ from pages.services import api_service
 logger = logging.getLogger(__name__)
 
 
-def health_check(request):
+def health_check():
     """
     Health check endpoint that verifies API connectivity.
     Returns JSON response indicating system status.

@@ -11,4 +11,36 @@
     <p>See customers information</p>
 </div>
 
+{% if customers %}
+    <div class="alert alert-info">
+        <strong>Total Customers:</strong> {{ total_customers }}
+    </div>
+
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td> {{ customer.id|default:"N/A" }} </td>
+                    <td> {{ customer.first_name|default:"N/A" }} </td>
+                    <td> {{ customer.last_name|default:"N/A" }} </td>
+                    <td> {{ customer.email}} </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+{% endif %}
+
 {% endblock %}

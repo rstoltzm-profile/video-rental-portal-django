@@ -115,10 +115,10 @@ class APIService:
             if isinstance(response_data, list):
                 logger.info("Retrieved %d films from API", len(response_data))
                 return response_data, None
-            else:
-                error_message = "Expected list of films but received different format"
-                logger.error(error_message)
-                return [], error_message
+
+            error_message = "Expected list of films but received different format"
+            logger.error(error_message)
+            return [], error_message
 
         return [], error_message
 
@@ -170,10 +170,9 @@ class APIService:
             if isinstance(response_data, list):
                 logger.info("Retrieved %d customers from API", len(response_data))
                 return response_data, None
-            else:
-                error_message = "Expected list of customers but received different format"
-                logger.error(error_message)
-                return [], error_message
+            error_message = "Expected list of customers but received different format"
+            logger.error(error_message)
+            return [], error_message
 
         return [], error_message
 
