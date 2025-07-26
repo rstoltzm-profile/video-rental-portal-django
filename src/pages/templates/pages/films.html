@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load format_filters %}
 
 {% block title %}Films - Video Rental Portal{% endblock %}
 
@@ -53,15 +54,7 @@
                         {{ film.title|default:"N/A" }}
                     </td>
                     <td class="max-width-300">
-                        {% if film.description %}
-                            {% if film.description|length > 100 %}
-                                {{ film.description|truncatechars:100 }}
-                            {% else %}
-                                {{ film.description }}
-                            {% endif %}
-                        {% else %}
-                            <em>No description available</em>
-                        {% endif %}
+                        {{ film.description|default:"No description available"|truncate_smart:100 }}
                     </td>
                     <td class="text-center">
                         {{ film.release_year|default:"N/A" }}

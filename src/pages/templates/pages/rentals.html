@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load format_filters %}
+
+{% block title %}Rentals - Video Rental Portal{% endblock %}
+
+{% block content %}
+<h2>🎬 Rentals Catalog</h2>
+<p>Browse and manage your rental inventory.</p>
+
+{% if error_message %}
+    <div class="alert alert-error">
+        <strong>Error:</strong> {{ error_message }}
+        <br><small>Make sure the API server is running on localhost:8080</small>
+    </div>
+{% endif %}
+
+{% if rentals %}
+    <div class="alert alert-info">
+        {% if is_search %}
+            <strong>Search Result:</strong> Found rental with ID {{ search_rental_id }}
+        {% else %}
+            <strong>Total Rentals:</strong> {{ total_rentals }}
+        {% endif %}
+    </div>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th class="text-center">Phone</th>
+                    <th class="text-center">Rental Date</th>
+                    <th class="text-center">Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rental in rentals %}
+                <tr>
+                    <td>
+                        {{ rental.first_name|default:"N/A" }}
+                    </td>
+                    <td>
+                        {{ rental.last_name }}
+                    </td>
+                    <td class="text-center">
+                        {{ rental.phone|format_phone }}
+                    </td>
+                    <td class="text-center">
+                        {{ rental.rental_date|format_datetime }}
+                    </td>
+                    <td>
+                        {{ rental.title }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <button onclick="location.reload()" class="btn btn-success">
+            🔄 Refresh Rentals
+        </button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">
+            ← Back to Home
+        </a>
+    </div>
+
+{% endif %}
+
+<div class="info-box">
+    <h4>📡 API Information</h4>
+    <p><strong>Endpoint:</strong> <code>GET http://localhost:8080/v1/rentals</code></p>
+    <p><strong>Authentication:</strong> X-API-Key header required</p>
+    <p><strong>Response:</strong> Array of rental objects with title, description, release_year, language, and rating</p>
+</div>
+
+{% endblock %}

@@ -88,5 +88,21 @@ def customers(request):
         'search_customer_id': search_customer_id,
         'is_search': bool(search_customer_id)
     }
-    
+
     return render(request, 'pages/customers.html', context)
+
+def rentals(request):
+    """Rentals listing page"""
+    log_user_action(None, "Accessed rentals page")
+
+    rentals_data = []
+    error_message = None
+    rentals_data, error_message = api_service.get_rentals()
+
+    context = {
+        'rentals': rentals_data,
+        'error_message': error_message,
+        'total_rentals': len(rentals_data),
+    }
+
+    return render(request, 'pages/rentals.html', context)

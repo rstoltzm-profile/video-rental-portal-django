@@ -188,6 +188,25 @@ class APIService:
         """
         response_data, error_message = self._make_request(f'/v1/customers/{customer_id}')
         return response_data, error_message
+    
+    def get_rentals(self) -> Tuple[List[Dict], Optional[str]]:
+        """
+        Get all rentals from the API.
+        
+        Returns:
+            Tuple of (rentals_list, error_message)
+        """
+        response_data, error_message = self._make_request('/v1/rentals')
+
+        if response_data is not None:
+            if isinstance(response_data, list):
+                logger.info("Retrieved %d rentals from API", len(response_data))
+                return response_data, None
+            error_message = "Expected list of rentals but received different format"
+            logger.error(error_message)
+            return [], error_message
+
+        return [], error_message
 
     def health_check(self) -> Tuple[bool, Optional[str]]:
         """
