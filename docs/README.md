@@ -3,6 +3,8 @@
 ## env
 ```bash
 source venv/bin/activate
+cd src
+make webapp-run
 ```
 
 ## freeze
@@ -13,7 +15,7 @@ pip freeze > requirements.txt
 ## django
 ```bash
 source venv/bin/activate
-cd source
+cd src
 python manage.py runserver
 ```
 
