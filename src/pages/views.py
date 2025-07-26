@@ -106,3 +106,15 @@ def rentals(request):
     }
 
     return render(request, 'pages/rentals.html', context)
+
+def stores(request):
+    """stores listing page"""
+    log_user_action(None, "Accessed stores page")
+
+    return render(request, 'pages/stores.html')
+
+def payments(request):
+    """payments listing page"""
+    log_user_action(None, "Accessed payments page")
+
+    return render(request, 'pages/payments.html')
